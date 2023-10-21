@@ -1,0 +1,170 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`minimum props 1`] = `
+<RNCSafeAreaView
+  edges={
+    {
+      "bottom": "additive",
+      "left": "additive",
+      "right": "additive",
+      "top": "additive",
+    }
+  }
+>
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "backgroundColor": "#F4F4F4",
+        "flexDirection": "row",
+        "gap": 20,
+        "justifyContent": "space-between",
+        "margin": 10,
+        "zIndex": 999,
+      }
+    }
+  >
+    <Text
+      allowFontScaling={false}
+      selectable={false}
+      style={
+        [
+          {
+            "color": undefined,
+            "fontSize": 30,
+          },
+          undefined,
+          {
+            "fontFamily": "Ionicons",
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+          },
+          {},
+        ]
+      }
+    >
+      
+    </Text>
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "backgroundColor": "#fff",
+          "borderRadius": 20,
+          "flex": 1,
+          "flexDirection": "row",
+          "justifyContent": "center",
+        }
+      }
+    >
+      <Text
+        allowFontScaling={false}
+        selectable={false}
+        style={
+          [
+            {
+              "color": "#000",
+              "fontSize": 20,
+            },
+            {
+              "padding": 10,
+            },
+            {
+              "fontFamily": "Ionicons",
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+            },
+            {},
+          ]
+        }
+      >
+        
+      </Text>
+      <TextInput
+        onChangeText={[MockFunction]}
+        placeholder="Search product"
+        style={
+          {
+            "backgroundColor": "#fff",
+            "color": "#424242",
+            "flex": 1,
+            "paddingBottom": 10,
+            "paddingLeft": 0,
+            "paddingRight": 10,
+            "paddingTop": 10,
+          }
+        }
+        underlineColorAndroid="transparent"
+      />
+    </View>
+  </View>
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "backgroundColor": "#F4F4F4",
+        "flexDirection": "row",
+        "gap": 20,
+        "justifyContent": "space-between",
+        "margin": 10,
+        "zIndex": 999,
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "gap": 10,
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "color": "#000",
+            "fontSize": 30,
+            "fontStyle": "normal",
+            "fontWeight": "800",
+          }
+        }
+      >
+        Sneakers
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#000",
+            "fontSize": 16,
+            "fontStyle": "normal",
+            "fontWeight": "400",
+          }
+        }
+      >
+        0
+         products found
+      </Text>
+    </View>
+    <Text
+      allowFontScaling={false}
+      selectable={false}
+      style={
+        [
+          {
+            "color": undefined,
+            "fontSize": 24,
+          },
+          undefined,
+          {
+            "fontFamily": "Ionicons",
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+          },
+          {},
+        ]
+      }
+    >
+      
+    </Text>
+  </View>
+</RNCSafeAreaView>
+`;
