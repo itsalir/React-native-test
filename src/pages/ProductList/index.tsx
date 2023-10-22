@@ -1,21 +1,17 @@
-import {StyleSheet, Animated, RefreshControl} from 'react-native';
-import React, {useCallback, useRef, useState} from 'react';
+import {StyleSheet, RefreshControl} from 'react-native';
+import React, {useCallback, useState} from 'react';
 import ProductBox from './components/ProductBox';
 import {useQuery} from '@tanstack/react-query';
 import {getProductList} from '../../api';
 import {ProductListType} from '../../api/types';
 import LoadingView from '../../components/LoadingView';
 import HeaderList from './components/HeaderList';
+import EmptyList from '../../components/EmptyList';
+import Animated from 'react-native-reanimated';
 
 const ProductList = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const scrollY = useRef(new Animated.Value(0)).current;
-  const translateY = scrollY.interpolate({
-    inputRange: [0, 100],
-    outputRange: [0, -100],
-    extrapolate: 'clamp',
-  });
   const {data, refetch, isLoading, isFetching, error} = useQuery<
     ProductListType[]
   >({
@@ -24,12 +20,14 @@ const ProductList = () => {
     refetchOnMount: false,
   });
 
-  const handleRefresh = useCallback(async () => {
+  const handleRefresh = useCallback(() => {
     refetch();
   }, [refetch]);
 
   const list = searchTerm
-    ? data?.filter(item => item.title.toLocaleLowerCase().includes(searchTerm))
+    ? data?.filter(item =>
+        item.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()),
+      )
     : data;
   return (
     <LoadingView {...{isLoading, error, refetch}}>
@@ -44,23 +42,12 @@ const ProductList = () => {
         refreshControl={
           <RefreshControl refreshing={isFetching} onRefresh={handleRefresh} />
         }
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {y: scrollY}}}],
-          {useNativeDriver: false},
-        )}
+        ListEmptyComponent={<EmptyList message="Item not found" />}
         ListHeaderComponent={
-          <Animated.View style={{transform: [{translateY}]}}>
-            <HeaderList
-              onChangeText={text => setSearchTerm(text)}
-              data={list}
-            />
-          </Animated.View>
+          <HeaderList onChangeText={text => setSearchTerm(text)} data={list} />
         }
       />
     </LoadingView>
-    ///shard elenet
-
-    ///measure
   );
 };
 

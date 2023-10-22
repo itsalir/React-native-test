@@ -5,7 +5,7 @@ import {ProductListType} from './types';
 
 export const getProductList = async (): Promise<ProductListType[]> => {
   const data = await callApi({
-    url: ApiRoutes.product.productList,
+    url: createURL(ApiRoutes.product.productList),
     method: 'get',
   });
 

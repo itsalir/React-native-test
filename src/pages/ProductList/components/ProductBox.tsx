@@ -4,10 +4,10 @@ import {ProductListType} from '../../../api/types';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import {handleLike} from './logicLike';
 import {RootStackParamList} from '../../../types/NavigationTypes';
 import {useMutation} from '@tanstack/react-query';
 import {updateBookMark} from '../../../api';
+import {handleBookmark} from './logicBookmark';
 type Props = {
   item: ProductListType;
 };
@@ -18,12 +18,12 @@ const ProductBox = ({item}: Props) => {
   const {mutate} = useMutation({
     mutationFn: (_item: ProductListType) => updateBookMark(_item.id, _item),
     onError(error, _item) {
-      handleLike(_item);
+      handleBookmark(_item);
     },
   });
-  const handleLikeReq = (_item: ProductListType) => {
+  const handleBookmarkReq = (_item: ProductListType) => {
     mutate({..._item, isBookmark: !_item.isBookmark});
-    handleLike(_item);
+    handleBookmark(_item);
   };
   return (
     <TouchableOpacity
@@ -43,7 +43,7 @@ const ProductBox = ({item}: Props) => {
       <View style={styles.bookConatiner}>
         <Text style={styles.price}>{`$${item?.price || 0}`}</Text>
         <Icon
-          onPress={() => handleLikeReq(item)}
+          onPress={() => handleBookmarkReq(item)}
           name={item?.isBookmark ? 'bookmark' : 'bookmark-outline'}
           color={item?.isBookmark ? 'red' : '#000'}
           size={24}

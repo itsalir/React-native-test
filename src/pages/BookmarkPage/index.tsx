@@ -1,21 +1,16 @@
 import {Animated, RefreshControl, StyleSheet} from 'react-native';
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import {ProductListType} from '../../api/types';
 import {getProductList} from '../../api';
 import LoadingView from '../../components/LoadingView';
 import ProductBox from '../ProductList/components/ProductBox';
 import HeaderList from '../ProductList/components/HeaderList';
+import EmptyList from '../../components/EmptyList';
 
 const BookmarkPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const scrollY = useRef(new Animated.Value(0)).current;
-  const translateY = scrollY.interpolate({
-    inputRange: [0, 100],
-    outputRange: [0, -100],
-    extrapolate: 'clamp',
-  });
   const {data, refetch, isLoading, error, isFetching} = useQuery<
     ProductListType[]
   >({
@@ -29,7 +24,9 @@ const BookmarkPage = () => {
     ? data?.filter(
         item =>
           item.isBookmark &&
-          item.title.toLocaleLowerCase().includes(searchTerm),
+          item.title
+            .toLocaleLowerCase()
+            .includes(searchTerm.toLocaleLowerCase()),
       )
     : data?.filter(item => item.isBookmark);
 
@@ -46,18 +43,13 @@ const BookmarkPage = () => {
         refreshControl={
           <RefreshControl refreshing={isFetching} onRefresh={handleRefresh} />
         }
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {y: scrollY}}}],
-          {useNativeDriver: false},
-        )}
+        ListEmptyComponent={<EmptyList message="Bookmark is Empty" />}
         ListHeaderComponent={
-          <Animated.View style={{transform: [{translateY}]}}>
-            <HeaderList
-              bookmark
-              onChangeText={text => setSearchTerm(text)}
-              data={list}
-            />
-          </Animated.View>
+          <HeaderList
+            bookmark
+            onChangeText={text => setSearchTerm(text)}
+            data={list}
+          />
         }
       />
     </LoadingView>

@@ -5,7 +5,8 @@ import {isIOS} from '../utilities/Environment';
 import ProductList from '../pages/ProductList';
 import ProductDetails from '../pages/ProductDetails';
 import BookmarkPage from '../pages/BookmarkPage';
-const Stack = createNativeStackNavigator();
+import {RootStackParamList} from '../types/NavigationTypes';
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const FullScreenStack = () => {
   return (

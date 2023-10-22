@@ -4,27 +4,26 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {ProductListType} from '../../../api/types';
 import {isIOS} from '../../../utilities/Environment';
-import {handleLike} from '../../ProductList/components/logicLike';
 import {useMutation} from '@tanstack/react-query';
 import {updateBookMark} from '../../../api';
+import {handleBookmark} from '../../ProductList/components/logicBookmark';
 
 type Props = {
   item?: ProductListType;
 };
 
-/// use api for here
 const Header = ({item}: Props) => {
   const navigation = useNavigation();
 
   const {mutate} = useMutation({
     mutationFn: (_item: ProductListType) => updateBookMark(_item.id, _item),
     onError(error, _item) {
-      handleLike(_item);
+      handleBookmark(_item);
     },
   });
-  const handleLikeReq = (_item: ProductListType) => {
+  const handleBookmarkReq = (_item: ProductListType) => {
     mutate({..._item, isBookmark: !_item.isBookmark});
-    handleLike(_item);
+    handleBookmark(_item);
   };
   return (
     <View style={styles.containerIcon}>
@@ -36,7 +35,7 @@ const Header = ({item}: Props) => {
 
       {item ? (
         <Icon
-          onPress={() => handleLikeReq(item)}
+          onPress={() => handleBookmarkReq(item)}
           name={item?.isBookmark ? 'bookmark' : 'bookmark-outline'}
           color={item?.isBookmark ? 'red' : '#000'}
           size={24}

@@ -4,10 +4,9 @@ import {ProductListType} from '../../../api/types';
 import {isIOS} from '../../../utilities/Environment';
 
 type Props = {
-  item?: ProductListType;
+  item: ProductListType;
 };
 
-/// use api for here
 const HeaderProduct = ({item}: Props) => {
   return (
     <ImageBackground
