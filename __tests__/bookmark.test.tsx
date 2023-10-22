@@ -22,8 +22,7 @@ test('toggles the "like" state when the icon is pressed', () => {
 
   const {getByTestId} = render(<HeaderProduct item={mockItem} />);
 
-  const likeIcon = getByTestId('like-icon');
-  console.log('alireza', likeIcon.props);
+  const likeIcon = getByTestId('bookmark-icon');
 
   expect(likeIcon.props.style[0].color).toBe('#000');
 
