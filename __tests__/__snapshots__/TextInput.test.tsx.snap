@@ -97,6 +97,30 @@ exports[`minimum props 1`] = `
         underlineColorAndroid="transparent"
       />
     </View>
+    <Text
+      allowFontScaling={false}
+      onPress={[Function]}
+      selectable={false}
+      style={
+        [
+          {
+            "color": "#000",
+            "fontSize": 20,
+          },
+          {
+            "padding": 10,
+          },
+          {
+            "fontFamily": "Ionicons",
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+          },
+          {},
+        ]
+      }
+    >
+      
+    </Text>
   </View>
   <View
     style={
