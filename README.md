@@ -1,79 +1,116 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+## Project Overview
+This repository contains a React Native application with four main screens:
 
-# Getting Started
+## Splash Screen (Splash.tsx)
+This is the initial screen displayed when the app starts. It includes a Lottie animation and automatically navigates to the "Product List" screen upon animation completion.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
-
-## Step 1: Start the Metro Server
-
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
-
-To start Metro, run the following command from the _root_ of your React Native project:
 
 ```bash
-# using npm
-npm start
+import React from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import LottieView from 'lottie-react-native';
+import {StyleSheet} from 'react-native';
+import {useQuery} from '@tanstack/react-query';
+import {ProductListType} from '../../api/types';
+import {getProductList} from '../../api';
+import {RootStackParamList} from '../../types/NavigationTypes';
 
-# OR using Yarn
-yarn start
+const Animation = require('../../assets/json/Animation.json');
+
+const Splash = () => {
+  // ... (animation and navigation logic)
+};
+
+export default Splash;
 ```
-
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
+## Product List Screen (ProductList.tsx)
+This screen displays a list of products fetched from a mock API. It supports searching and pull-to-refresh functionality.
 
 ```bash
-# using npm
-npm run android
+import {StyleSheet, RefreshControl} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import ProductBox from './components/ProductBox';
+import {useQuery} from '@tanstack/react-query';
+import {getProductList} from '../../api';
+import {ProductListType} from '../../api/types';
+import LoadingView from '../../components/LoadingView';
+import HeaderList from './components/HeaderList';
+import EmptyList from '../../components/EmptyList';
+import Animated from 'react-native-reanimated';
 
-# OR using Yarn
-yarn android
+const ProductList = () => {
+  // ... (fetching and displaying product list with search and refresh functionality)
+};
+
+export default ProductList;
 ```
 
-### For iOS
+## Bookmark Page (BookmarkPage.tsx)
+This screen allows you to view and search bookmarked products. It also supports pull-to-refresh.
 
 ```bash
-# using npm
-npm run ios
 
-# OR using Yarn
-yarn ios
+import {Animated, RefreshControl, StyleSheet} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {useQuery} from '@tanstack/react-query';
+import {ProductListType} from '../../api/types';
+import {getProductList} from '../../api';
+import LoadingView from '../../components/LoadingView';
+import ProductBox from '../ProductList/components/ProductBox';
+import HeaderList from '../ProductList/components/HeaderList';
+import EmptyList from '../../components/EmptyList';
+
+const BookmarkPage = () => {
+  // ... (fetching and displaying bookmarked products with search and refresh functionality)
+};
+
+export default BookmarkPage;
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+## Product Details (ProductDetails.tsx)
+This screen displays detailed information about a specific product, including options for adding the product to the cart.
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+```bash
 
-## Step 3: Modifying your App
+import {View, StyleSheet, Pressable, Text} from 'react-native';
+import React from 'react';
+import {RouteProp, useRoute} from '@react-navigation/native';
+import {ProductListType} from '../../api/types';
+import HeaderProduct from './components/HeaderProduct';
+import InfoProduct from './components/InfoProduct';
+import SizeProduct from './components/SizeProduct';
+import {getProductDetails} from '../../api';
+import {useQuery} from '@tanstack/react-query';
+import LoadingView from '../../components/LoadingView';
+import {RootStackParamList} from '../../types/NavigationTypes';
+import Header from './components/Header';
 
-Now that you have successfully run the app, let's modify it.
+const ProductDetails = () => {
+  // ... (fetching and displaying detailed product information)
+};
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+export default ProductDetails;
+```
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
 
-## Congratulations! :tada:
+## Note on API
+The application relies on a mock API to fetch product data. Please be aware that this API has a limitation: it provides a new image every time you make a request. Additionally, the "Product List" and "Bookmark Page" screens allow searching, but due to the absence of a real API, filtering is manually handled on the retrieved data.
 
-You've successfully run and modified your React Native App. :partying_face:
+## Data Refresh
+Both the "Product List" and "Bookmark Page" screens feature pull-to-refresh functionality, allowing you to manually refresh the data when needed.The "Bookmark Page" uses React Query and the setQuery  to update the cache when bookmarks are modified.
 
-### Now what?
+## Additional Information
+The project is written in React Native and utilizes various libraries and components for navigation, state management, and UI design. The code is organized into separate modules and components for better maintainability.
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+Feel free to explore the code, test the app, and make any necessary improvements or customizations. If you have any questions or encounter issues, please don't hesitate to reach out for assistance.
 
-# Troubleshooting
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
 
-# Learn More
 
-To learn more about React Native, take a look at the following resources:
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+
+
+
+
