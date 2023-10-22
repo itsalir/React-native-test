@@ -7,22 +7,20 @@ type Props = {
 };
 
 const InfoProduct = ({item}: Props) => {
-  console.log('item', item.image);
-
   return (
     <>
       <View style={styles.container}>
         <View style={styles.flex1}>
-          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.title}>{item?.title}</Text>
           <Text numberOfLines={2} style={styles.text}>
-            {item.text}
+            {item?.text}
           </Text>
         </View>
-        <Text style={styles.price}>{`$${item.price}`}</Text>
+        <Text style={styles.price}>{`$${item?.price}`}</Text>
       </View>
       <View style={styles.separator} />
       <View style={styles.container}>
-        <Text style={styles.description}>{item.description}</Text>
+        <Text style={styles.description}>{item?.description}</Text>
       </View>
       <View style={styles.separator} />
     </>

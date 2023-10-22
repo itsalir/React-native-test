@@ -1,23 +1,42 @@
 import {View, StyleSheet, Pressable, Text} from 'react-native';
 import React from 'react';
-import {useRoute} from '@react-navigation/native';
+import {RouteProp, useRoute} from '@react-navigation/native';
 import {ProductListType} from '../../api/types';
 import HeaderProduct from './components/HeaderProduct';
 import InfoProduct from './components/InfoProduct';
 import SizeProduct from './components/SizeProduct';
+import {getProductDetails} from '../../api';
+import {useQuery} from '@tanstack/react-query';
+import LoadingView from '../../components/LoadingView';
+import {RootStackParamList} from '../../types/NavigationTypes';
+import Header from './components/Header';
 
 const ProductDetails = () => {
-  const item = useRoute().params as ProductListType;
+  const {id} =
+    useRoute<RouteProp<RootStackParamList, 'ProductDetails'>>().params;
+  const {data, refetch, isLoading, error} = useQuery<ProductListType>({
+    queryKey: getProductDetails.getKey(id),
+    queryFn: (): Promise<ProductListType> => getProductDetails(id),
+  });
 
   return (
-    <View style={styles.container}>
-      <HeaderProduct item={item} />
-      <InfoProduct item={item} />
-      <SizeProduct />
-      <Pressable style={styles.button} onPress={() => {}}>
-        <Text style={styles.btnText}>add to cart</Text>
-      </Pressable>
-    </View>
+    <>
+      <View style={styles.container}>
+        <LoadingView {...{isLoading, error, refetch}}>
+          {data ? (
+            <>
+              <HeaderProduct item={data} />
+              <InfoProduct item={data} />
+              <SizeProduct />
+              <Pressable style={styles.button} onPress={() => {}}>
+                <Text style={styles.btnText}>add to cart</Text>
+              </Pressable>
+            </>
+          ) : null}
+        </LoadingView>
+      </View>
+      <Header />
+    </>
   );
 };
 

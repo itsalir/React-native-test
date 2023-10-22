@@ -8,8 +8,7 @@ import LoadingView from '../../components/LoadingView';
 import HeaderList from './components/HeaderList';
 
 const ProductList = () => {
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [newData, setNewData] = useState<ProductListType[] | undefined>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const scrollY = useRef(new Animated.Value(0)).current;
   const translateY = scrollY.interpolate({
@@ -17,42 +16,33 @@ const ProductList = () => {
     outputRange: [0, -100],
     extrapolate: 'clamp',
   });
-  const {data, refetch, isLoading, error} = useQuery<ProductListType[]>({
+  const {data, refetch, isLoading, isFetching, error} = useQuery<
+    ProductListType[]
+  >({
     queryKey: getProductList.getKey(),
-    queryFn: getProductList,
+    queryFn: (): Promise<ProductListType[]> => getProductList(),
+    refetchOnMount: false,
   });
 
   const handleRefresh = useCallback(async () => {
-    setIsRefreshing(true);
-    await refetch();
-    setIsRefreshing(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    refetch();
+  }, [refetch]);
 
-  const handleSearch = (text: string) => {
-    const filterData: ProductListType[] | undefined = data?.filter(item =>
-      item.title.includes(text),
-    );
-
-    if (filterData && filterData.length > 0) {
-      setNewData(filterData);
-    } else {
-      setNewData(undefined);
-    }
-  };
-
+  const list = searchTerm
+    ? data?.filter(item => item.title.toLocaleLowerCase().includes(searchTerm))
+    : data;
   return (
     <LoadingView {...{isLoading, error, refetch}}>
       <Animated.FlatList
         contentContainerStyle={styles.contentContainer}
         columnWrapperStyle={styles.columnWrapper}
-        data={newData?.length ? newData : data}
+        data={list}
         style={styles.container}
         numColumns={2}
         keyExtractor={item => item.id + item.title}
-        renderItem={({item, index}) => <ProductBox key={index} {...{item}} />}
+        renderItem={({item}) => <ProductBox {...{item}} />}
         refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
+          <RefreshControl refreshing={isFetching} onRefresh={handleRefresh} />
         }
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {y: scrollY}}}],
@@ -60,11 +50,17 @@ const ProductList = () => {
         )}
         ListHeaderComponent={
           <Animated.View style={{transform: [{translateY}]}}>
-            <HeaderList onChangeText={text => handleSearch(text)} data={data} />
+            <HeaderList
+              onChangeText={text => setSearchTerm(text)}
+              data={list}
+            />
           </Animated.View>
         }
       />
     </LoadingView>
+    ///shard elenet
+
+    ///measure
   );
 };
 
@@ -79,10 +75,10 @@ const styles = StyleSheet.create({
     gap: 10,
     backgroundColor: '#F4F4F4',
     paddingBottom: 20,
-    zIndex: 1,
   },
   columnWrapper: {
-    gap: 20,
+    gap: 10,
+    justifyContent: 'space-between',
   },
 });
 

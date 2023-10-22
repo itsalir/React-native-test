@@ -1,30 +1,36 @@
-import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {ProductListType} from '../../../api/types';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {handleLike} from './logicLike';
+import {RootStackParamList} from '../../../types/NavigationTypes';
+import {useMutation} from '@tanstack/react-query';
+import {updateBookMark} from '../../../api';
 type Props = {
   item: ProductListType;
 };
 
 const ProductBox = ({item}: Props) => {
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const {mutate} = useMutation({
+    mutationFn: (_item: ProductListType) => updateBookMark(_item.id, _item),
+    onError(error, _item) {
+      handleLike(_item);
+    },
+  });
+  const handleLikeReq = (_item: ProductListType) => {
+    mutate({..._item, isBookmark: !_item.isBookmark});
+    handleLike(_item);
+  };
   return (
     <TouchableOpacity
       key={item.id + item.title}
-      onPress={() => navigation.navigate('ProductDetails', item)}
+      onPress={() => navigation.navigate('ProductDetails', {id: item.id})}
       activeOpacity={0.9}
       style={styles.container}>
-      <Icon
-        onPress={() => handleLike(item)}
-        name={item?.isLiked ? 'heart' : 'heart-outline'}
-        color={item?.isLiked ? 'red' : '#000'}
-        size={24}
-        style={[styles.icon]}
-      />
       <Image
         style={styles.img}
         resizeMode={'contain'}
@@ -34,7 +40,16 @@ const ProductBox = ({item}: Props) => {
       <Text numberOfLines={1} style={styles.text}>
         {item?.text}
       </Text>
-      <Text style={styles.price}>{`$${item?.price || 0}`}</Text>
+      <View style={styles.bookConatiner}>
+        <Text style={styles.price}>{`$${item?.price || 0}`}</Text>
+        <Icon
+          onPress={() => handleLikeReq(item)}
+          name={item?.isBookmark ? 'bookmark' : 'bookmark-outline'}
+          color={item?.isBookmark ? 'red' : '#000'}
+          size={24}
+          style={[styles.icon]}
+        />
+      </View>
     </TouchableOpacity>
   );
 };
@@ -44,9 +59,9 @@ export default ProductBox;
 const styles = StyleSheet.create({
   container: {
     height: 230,
-    width: 160,
+    width: 170,
+    flexGrow: 1,
     backgroundColor: '#fff',
-    flexGrow: 2,
     borderRadius: 15,
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -81,6 +96,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: '400',
+  },
+  bookConatiner: {
     marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });

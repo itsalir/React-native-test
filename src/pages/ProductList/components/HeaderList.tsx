@@ -3,17 +3,32 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {ProductListType} from '../../../api/types';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../../types/NavigationTypes';
 
 type Props = {
   data?: ProductListType[];
   onChangeText: (text: string) => void;
+  bookmark?: boolean;
 };
 
-const HeaderList = ({data, onChangeText}: Props) => {
+const HeaderList = ({data, onChangeText, bookmark}: Props) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <Icon name="menu-outline" size={30} />
+        {bookmark ? (
+          <Icon
+            onPress={() => navigation.goBack()}
+            name="chevron-back-outline"
+            size={24}
+          />
+        ) : (
+          <Icon name="menu-outline" size={30} />
+        )}
         <View style={styles.searchSection}>
           <Icon
             style={styles.searchIcon}
@@ -28,16 +43,27 @@ const HeaderList = ({data, onChangeText}: Props) => {
             underlineColorAndroid="transparent"
           />
         </View>
+        {!bookmark ? (
+          <Icon
+            onPress={() => navigation.navigate('BookmarkPage')}
+            style={styles.searchIcon}
+            name="bookmark-outline"
+            size={20}
+            color="#000"
+          />
+        ) : null}
       </View>
-      <View style={styles.container}>
-        <View style={styles.containerView}>
-          <Text style={styles.title}>Sneakers</Text>
-          <Text style={styles.subTitle}>
-            {data?.length || 0} products found
-          </Text>
+      {!bookmark ? (
+        <View style={styles.container}>
+          <View style={styles.containerView}>
+            <Text style={styles.title}>Sneakers</Text>
+            <Text style={styles.subTitle}>
+              {data?.length || 0} products found
+            </Text>
+          </View>
+          <Icon name="funnel-outline" size={24} />
         </View>
-        <Icon name="funnel-outline" size={24} />
-      </View>
+      ) : null}
     </SafeAreaView>
   );
 };
