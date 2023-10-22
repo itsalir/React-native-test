@@ -8,7 +8,6 @@ import ProductBox from '../ProductList/components/ProductBox';
 import HeaderList from '../ProductList/components/HeaderList';
 
 const BookmarkPage = () => {
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -17,16 +16,15 @@ const BookmarkPage = () => {
     outputRange: [0, -100],
     extrapolate: 'clamp',
   });
-  const {data, refetch, isLoading, error} = useQuery<ProductListType[]>({
+  const {data, refetch, isLoading, error, isFetching} = useQuery<
+    ProductListType[]
+  >({
     queryKey: getProductList.getKey(),
     queryFn: getProductList,
   });
-  const handleRefresh = useCallback(async () => {
-    setIsRefreshing(true);
-    await refetch();
-    setIsRefreshing(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleRefresh = useCallback(() => {
+    refetch();
+  }, [refetch]);
   const list = searchTerm
     ? data?.filter(
         item =>
@@ -46,7 +44,7 @@ const BookmarkPage = () => {
         keyExtractor={item => item.id + item.title}
         renderItem={({item}) => <ProductBox {...{item}} />}
         refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
+          <RefreshControl refreshing={isFetching} onRefresh={handleRefresh} />
         }
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {y: scrollY}}}],

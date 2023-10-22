@@ -20,7 +20,6 @@ const Header = ({item}: Props) => {
     mutationFn: (_item: ProductListType) => updateBookMark(_item.id, _item),
     onError(error, _item) {
       handleLike(_item);
-      console.log(error);
     },
   });
   const handleLikeReq = (_item: ProductListType) => {

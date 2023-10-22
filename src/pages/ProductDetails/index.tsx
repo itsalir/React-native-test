@@ -35,7 +35,7 @@ const ProductDetails = () => {
           ) : null}
         </LoadingView>
       </View>
-      <Header />
+      <Header item={data} />
     </>
   );
 };
