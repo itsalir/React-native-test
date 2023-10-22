@@ -7,5 +7,5 @@ export type ProductListType = {
   text: string;
   size: string[];
   id: string;
-  isLiked?: boolean;
+  isBookmark?: boolean;
 };

@@ -4,6 +4,7 @@ import Splash from '../pages/Splash';
 import {isIOS} from '../utilities/Environment';
 import ProductList from '../pages/ProductList';
 import ProductDetails from '../pages/ProductDetails';
+import BookmarkPage from '../pages/BookmarkPage';
 const Stack = createNativeStackNavigator();
 
 const FullScreenStack = () => {
@@ -17,6 +18,7 @@ const FullScreenStack = () => {
       <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name="ProductList" component={ProductList} />
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
+      <Stack.Screen name="BookmarkPage" component={BookmarkPage} />
     </Stack.Navigator>
   );
 };

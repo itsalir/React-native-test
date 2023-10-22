@@ -10,8 +10,6 @@ type Props = {
 };
 
 const LoadingView = ({children, isLoading, error, refetch}: Props) => {
-  console.log('error', error);
-
   if (isLoading) {
     return <PendingState />;
   }
