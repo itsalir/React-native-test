@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     gap: 10,
     backgroundColor: '#F4F4F4',
     paddingBottom: 20,
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   columnWrapper: {
     gap: 10,
