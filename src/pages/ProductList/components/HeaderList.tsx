@@ -1,24 +1,26 @@
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {StyleSheet, TextInput, View} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {ProductListType} from '../../../api/types';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../types/NavigationTypes';
+import {ProductListType} from '../../../api/types';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
-  data?: ProductListType[];
   onChangeText: (text: string) => void;
   bookmark?: boolean;
+  data?: ProductListType[];
 };
 
-const HeaderList = ({data, onChangeText, bookmark}: Props) => {
+const HeaderList = ({onChangeText, bookmark, data}: Props) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+  const hasAnyBookmarked = data?.some(it => it.isBookmark);
+  const insets = useSafeAreaInsets();
   return (
-    <SafeAreaView>
+    <View style={[styles.containerSafe, {paddingTop: insets.top}]}>
       <View style={styles.container}>
         {bookmark ? (
           <Icon
@@ -46,39 +48,34 @@ const HeaderList = ({data, onChangeText, bookmark}: Props) => {
         {!bookmark ? (
           <Icon
             onPress={() => navigation.navigate('BookmarkPage')}
-            style={styles.searchIcon}
-            name="bookmark-outline"
+            // style={styles.searchIcon}
+            name={hasAnyBookmarked ? 'bookmark' : 'bookmark-outline'}
             size={20}
-            color="#000"
+            color={hasAnyBookmarked ? 'red' : '#000'}
           />
-        ) : null}
+        ) : (
+          <View style={styles.bookmarkEmpty} />
+        )}
       </View>
-      {!bookmark ? (
-        <View style={styles.container}>
-          <View style={styles.containerView}>
-            <Text style={styles.title}>Sneakers</Text>
-            <Text style={styles.subTitle}>
-              {data?.length || 0} products found
-            </Text>
-          </View>
-          <Icon name="funnel-outline" size={24} />
-        </View>
-      ) : null}
-    </SafeAreaView>
+    </View>
   );
 };
 
 export default HeaderList;
 
 const styles = StyleSheet.create({
+  containerSafe: {
+    backgroundColor: '#F4F4F4',
+  },
   container: {
     backgroundColor: '#F4F4F4',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    margin: 10,
+    padding: 10,
+    paddingHorizontal: 20,
     gap: 20,
-    zIndex: 999,
+    width: '100%',
   },
   title: {
     color: '#000',
@@ -96,9 +93,9 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   searchSection: {
-    flex: 1,
+    width: '70%',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 20,
@@ -107,12 +104,14 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   input: {
-    flex: 1,
     paddingTop: 10,
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 0,
     backgroundColor: '#fff',
     color: '#424242',
+  },
+  bookmarkEmpty: {
+    width: '10%',
   },
 });

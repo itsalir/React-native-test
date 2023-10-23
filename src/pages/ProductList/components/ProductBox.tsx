@@ -1,4 +1,12 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import React from 'react';
 import {ProductListType} from '../../../api/types';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -8,6 +16,13 @@ import {RootStackParamList} from '../../../types/NavigationTypes';
 import {useMutation} from '@tanstack/react-query';
 import {updateBookMark} from '../../../api';
 import {handleBookmark} from './logicBookmark';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+const {width} = Dimensions.get('window');
 type Props = {
   item: ProductListType;
 };
@@ -15,6 +30,8 @@ type Props = {
 const ProductBox = ({item}: Props) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const sharedValue = useSharedValue(0);
   const {mutate} = useMutation({
     mutationFn: (_item: ProductListType) => updateBookMark(_item.id, _item),
     onError(error, _item) {
@@ -25,6 +42,16 @@ const ProductBox = ({item}: Props) => {
     mutate({..._item, isBookmark: !_item.isBookmark});
     handleBookmark(_item);
   };
+
+  const sharedElementStyle = useAnimatedStyle(() => {
+    return {
+      position: 'absolute',
+      top: interpolate(sharedValue.value, [0, 1], [0, -100]),
+      left: interpolate(sharedValue.value, [0, 1], [0, 10]),
+      opacity: interpolate(sharedValue.value, [0, 1], [1, 0]),
+    };
+  });
+
   return (
     <TouchableOpacity
       key={item.id + item.title}
@@ -42,13 +69,40 @@ const ProductBox = ({item}: Props) => {
       </Text>
       <View style={styles.bookConatiner}>
         <Text style={styles.price}>{`$${item?.price || 0}`}</Text>
-        <Icon
-          onPress={() => handleBookmarkReq(item)}
-          name={item?.isBookmark ? 'bookmark' : 'bookmark-outline'}
-          color={item?.isBookmark ? 'red' : '#000'}
-          size={24}
-          style={[styles.icon]}
-        />
+        <TouchableWithoutFeedback
+          onPress={() => {
+            if (!item?.isBookmark) {
+              sharedValue.value = withTiming(
+                1,
+                {
+                  duration: 400,
+                },
+                () => {
+                  sharedValue.value = 0;
+                },
+              );
+            }
+            handleBookmarkReq(item);
+          }}>
+          <View>
+            <Animated.View>
+              <Icon
+                name={item?.isBookmark ? 'bookmark' : 'bookmark-outline'}
+                color={item?.isBookmark ? 'red' : '#000'}
+                size={24}
+                style={[styles.icon]}
+              />
+            </Animated.View>
+            <Animated.View style={sharedElementStyle}>
+              <Icon
+                name={item?.isBookmark ? 'bookmark' : 'bookmark-outline'}
+                color={item?.isBookmark ? 'red' : '#000'}
+                size={24}
+                style={[styles.icon]}
+              />
+            </Animated.View>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     </TouchableOpacity>
   );
@@ -59,8 +113,7 @@ export default ProductBox;
 const styles = StyleSheet.create({
   container: {
     height: 230,
-    width: 170,
-    flexGrow: 1,
+    width: width * 0.45,
     backgroundColor: '#fff',
     borderRadius: 15,
     paddingHorizontal: 20,

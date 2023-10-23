@@ -19,7 +19,11 @@ const FullScreenStack = () => {
       <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name="ProductList" component={ProductList} />
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
-      <Stack.Screen name="BookmarkPage" component={BookmarkPage} />
+      <Stack.Screen
+        options={{animation: 'slide_from_right'}}
+        name="BookmarkPage"
+        component={BookmarkPage}
+      />
     </Stack.Navigator>
   );
 };

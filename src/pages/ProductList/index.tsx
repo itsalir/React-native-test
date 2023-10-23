@@ -42,10 +42,12 @@ const ProductList = () => {
         refreshControl={
           <RefreshControl refreshing={isFetching} onRefresh={handleRefresh} />
         }
-        ListEmptyComponent={<EmptyList message="Item not found" />}
+        stickyHeaderHiddenOnScroll
+        stickyHeaderIndices={[0]}
         ListHeaderComponent={
-          <HeaderList onChangeText={text => setSearchTerm(text)} data={list} />
+          <HeaderList data={data} onChangeText={text => setSearchTerm(text)} />
         }
+        ListEmptyComponent={<EmptyList message="Item not found" />}
       />
     </LoadingView>
   );
@@ -58,14 +60,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contentContainer: {
-    marginHorizontal: 20,
+    paddingHorizontal: 10,
     gap: 10,
     backgroundColor: '#F4F4F4',
     paddingBottom: 20,
+    alignItems: 'center',
   },
   columnWrapper: {
     gap: 10,
-    justifyContent: 'space-between',
   },
 });
 

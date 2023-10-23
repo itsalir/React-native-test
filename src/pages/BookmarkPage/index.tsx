@@ -16,6 +16,7 @@ const BookmarkPage = () => {
   >({
     queryKey: getProductList.getKey(),
     queryFn: getProductList,
+    refetchOnMount: false,
   });
   const handleRefresh = useCallback(() => {
     refetch();
@@ -44,11 +45,13 @@ const BookmarkPage = () => {
           <RefreshControl refreshing={isFetching} onRefresh={handleRefresh} />
         }
         ListEmptyComponent={<EmptyList message="Bookmark is Empty" />}
+        stickyHeaderHiddenOnScroll
+        stickyHeaderIndices={[0]}
         ListHeaderComponent={
           <HeaderList
             bookmark
+            data={data}
             onChangeText={text => setSearchTerm(text)}
-            data={list}
           />
         }
       />
@@ -63,13 +66,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contentContainer: {
-    marginHorizontal: 20,
+    paddingHorizontal: 10,
     gap: 10,
     backgroundColor: '#F4F4F4',
     paddingBottom: 20,
-    zIndex: 1,
+    alignItems: 'center',
   },
   columnWrapper: {
-    gap: 20,
+    gap: 10,
   },
 });
