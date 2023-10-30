@@ -1,8 +1,24 @@
+
+https://github.com/itsalir/react-native-test/assets/51325450/e054b98c-2c17-44a9-a9da-d2e17110d6c7
 ## Project Overview
 This repository contains a React Native application with four main screens:
 
+## Demo
+
+
+
+
+
+https://github.com/itsalir/react-native-test/assets/51325450/3a4a42be-270d-476c-88cf-330c2237b6dc
+
+
+
+
+
+
 ## Splash Screen (Splash.tsx)
 This is the initial screen displayed when the app starts. It includes a Lottie animation and automatically navigates to the "Product List" screen upon animation completion.
+
 
 
 ```bash
