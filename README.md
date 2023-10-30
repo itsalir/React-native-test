@@ -1,5 +1,4 @@
 
-https://github.com/itsalir/react-native-test/assets/51325450/e054b98c-2c17-44a9-a9da-d2e17110d6c7
 ## Project Overview
 This repository contains a React Native application with four main screens:
 
